@@ -105,81 +105,150 @@ DATA CAR 2: 'Mercedes' going at 95 km/h
 
 /////////////////////////////////
 
-const account = {
-  owner: "Jonas",
-  movements: [200, 530, 120, 300],
-  get latest() {
-    return this.movements.slice(-1).pop();
-  },
-  set latest(mov) {
-    this.movements.push(mov);
+// const account = {
+//   owner: "Jonas",
+//   movements: [200, 530, 120, 300],
+//   get latest() {
+//     return this.movements.slice(-1).pop();
+//   },
+//   set latest(mov) {
+//     this.movements.push(mov);
+//   },
+// };
+
+// console.log(account.latest);
+
+// account.latest = 50;
+
+// console.log(account.movements);
+
+// class PersonCl {
+//   constructor(fullName, birthYear) {
+//     this.fullName = fullName;
+//     this.birthYear = birthYear;
+//   }
+
+//   // Instance methods
+//   // Methods will be added to .prototype property
+//   calcAge() {
+//     console.log(2037 - this.birthYear);
+//   }
+
+//   greet() {
+//     console.log(`Hey ${this.fullName}`);
+//   }
+
+//   get age() {
+//     return 2037 - this.birthYear;
+//   }
+
+//   // Set a property that already exists
+//   set fullName(name) {
+//     if (name.includes(" ")) this._fullName = name;
+//     else alert(`${name} is not a full name!`);
+//   }
+
+//   get fullName() {
+//     return this._fullName;
+//   }
+// }
+
+// const jessica = new PersonCl("Jessica Brown", 1000);
+
+// console.log(jessica);
+
+// console.log(jessica.fullName);
+
+// /////////////////////////////////////
+
+// class CarCl {
+//   constructor(make, speed) {
+//     this.make = make;
+//     this.speed = speed;
+//   }
+//   set speed(spd) {
+//     if (spd >= 0) this._speed = spd;
+//     else console.log(`Invalid speed`);
+//   }
+
+//   get speed() {
+//     return this._speed;
+//   }
+// }
+
+// const bmw = new CarCl("BMW", 250);
+
+// // bmw.speed = 100;
+
+// console.log(bmw);
+
+// console.log(bmw.speed);
+
+//////////////////////////////////////
+
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
   },
 };
 
-console.log(account.latest);
+const steven = Object.create(PersonProto);
 
-account.latest = 50;
+steven.name = "Steven";
+steven.birthYear = 1988;
+steven.calcAge();
 
-console.log(account.movements);
-
-class PersonCl {
-  constructor(fullName, birthYear) {
-    this.fullName = fullName;
-    this.birthYear = birthYear;
-  }
-
-  // Instance methods
-  // Methods will be added to .prototype property
-  calcAge() {
-    console.log(2037 - this.birthYear);
-  }
-
-  greet() {
-    console.log(`Hey ${this.fullName}`);
-  }
-
-  get age() {
-    return 2037 - this.birthYear;
-  }
-
-  // Set a property that already exists
-  set fullName(name) {
-    if (name.includes(" ")) this._fullName = name;
-    else alert(`${name} is not a full name!`);
-  }
-
-  get fullName() {
-    return this._fullName;
-  }
-}
-
-const jessica = new PersonCl("Jessica Brown", 1000);
-
-console.log(jessica);
-
-console.log(jessica.fullName);
+console.log(steven);
 
 /////////////////////////////////////
 
-class CarCl {
+// Coding Challenge #2
+
+/* 
+1. Re-create challenge 1, but this time using an ES6 class;
+2. Add a getter called 'speedUS' which returns the current speed in mi/h (divide by 1.6);
+3. Add a setter called 'speedUS' which sets the current speed in mi/h (but converts it to km/h before storing the value, by multiplying the input by 1.6);
+4. Create a new car and experiment with the accelerate and brake methods, and with the getter and setter.
+
+DATA CAR 1: 'Ford' going at 120 km/h
+*/
+
+class Car {
   constructor(make, speed) {
     this.make = make;
     this.speed = speed;
   }
-  set speed(spd) {
-    if (spd >= 0) this._speed = spd;
-    else console.log(`Invalid speed`);
+
+  // methods
+  accelerate() {
+    console.log(`${(this.speed += 10)}km/h`);
   }
 
-  get speed() {
-    return this._speed;
+  brake() {
+    console.log(`${(this.speed -= 5)}km/h`);
+  }
+
+  // set and get
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+  set speedUS(value) {
+    this.speed = value * 1.6;
   }
 }
 
-const bmw = new CarCl("BMW", 250);
+const ford = new Car("Ford", 120);
 
-// bmw.speed = 100;
+console.log(ford);
 
-console.log(bmw);
+ford.accelerate();
+ford.brake();
 
-console.log(bmw.speed);
+console.log(ford.speedUS);
+
+ford.speedUS = 50;
+
+console.log(ford.speedUS);
+
+console.log(ford);
