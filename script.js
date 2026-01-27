@@ -258,29 +258,94 @@ DATA CAR 1: 'Ford' going at 120 km/h
 // inheritance between classes
 
 // person constructor
-const Person = function (firstName, birthYear) {
-  this.firstName = firstName;
-  this.birthYear = birthYear;
+// const Person = function (firstName, birthYear) {
+//   this.firstName = firstName;
+//   this.birthYear = birthYear;
+// };
+// Person.prototype.calcAge = function () {
+//   console.log(2037 - this.birthYear);
+// };
+
+// // student constructor
+// const Student = function (firstName, birthYear, course) {
+//   Person.call(this, firstName, birthYear);
+//   this.course = course;
+// };
+
+// Student.prototype = Object.create(Person.prototype);
+// Student.prototype.constructor = Student;
+
+// Student.prototype.introduce = function () {
+//   console.log(`My name is ${this.firstName} and I study ${this.course}`);
+// };
+
+// const mike = new Student("Mike", 2020, "Computer Science");
+
+// console.log(mike);
+// mike.introduce();
+// mike.calcAge();
+
+//////////////////////////////////////////////////
+
+/* 
+1. Use a constructor function to implement an Electric Car (called EV) as a CHILD "class" of Car. Besides a make and current speed, the EV also has the current battery charge in % ('charge' property);
+2. Implement a 'chargeBattery' method which takes an argument 'chargeTo' and sets the battery charge to 'chargeTo';
+3. Implement an 'accelerate' method that will increase the car's speed by 20, and decrease the charge by 1%. Then log a message like this: 'Tesla going at 140 km/h, with a charge of 22%';
+4. Create an electric car object and experiment with calling 'accelerate', 'brake' and 'chargeBattery' (charge to 90%). Notice what happens when you 'accelerate'! HINT: Review the definiton of polymorphism 😉
+
+DATA CAR 1: 'Tesla' going at 120 km/h, with a charge of 23%
+*/
+
+function Car(make, speed) {
+  this.make = make;
+  this.speed = speed;
+}
+
+Car.prototype.accelerate = function () {
+  console.log((this.speed += 10));
 };
-Person.prototype.calcAge = function () {
-  console.log(2037 - this.birthYear);
+
+Car.prototype.brake = function () {
+  console.log((this.speed -= 5));
 };
 
-// student constructor
-const Student = function (firstName, birthYear, course) {
-  Person.call(this, firstName, birthYear);
-  this.course = course;
+// electric car
+
+function EV(make, speed, charge) {
+  Car.call(this, make, speed);
+  this.charge = charge;
+}
+EV.prototype = Object.create(Car.prototype);
+EV.prototype.constructor = EV;
+EV.prototype.chargeBattery = function (chargeTo) {
+  if (chargeTo <= 100 && chargeTo >= 0) {
+    this.charge = chargeTo;
+  } else {
+    console.log("Invalid charge value!");
+  }
+};
+EV.prototype.accelerate = function () {
+  if (this.charge <= 6) {
+    console.log(`Battery too low (${this.charge}%)`);
+    return;
+  }
+
+  this.speed += 20;
+  this.charge -= 1;
+
+  console.log(
+    `${this.make} is going at ${this.speed} km/h, with a charge of ${this.charge}%`
+  );
 };
 
-Student.prototype = Object.create(Person.prototype);
-Student.prototype.constructor = Student;
+const tesla = new EV("Tesla", 120, 23);
 
-Student.prototype.introduce = function () {
-  console.log(`My name is ${this.firstName} and I study ${this.course}`);
-};
+console.log(tesla);
 
-const mike = new Student("Mike", 2020, "Computer Science");
+tesla.chargeBattery(7);
 
-console.log(mike);
-mike.introduce();
-mike.calcAge();
+console.log(tesla);
+
+tesla.accelerate();
+
+tesla.brake();
