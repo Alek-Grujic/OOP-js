@@ -296,56 +296,209 @@ DATA CAR 1: 'Ford' going at 120 km/h
 DATA CAR 1: 'Tesla' going at 120 km/h, with a charge of 23%
 */
 
-function Car(make, speed) {
-  this.make = make;
-  this.speed = speed;
+// function Car(make, speed) {
+//   this.make = make;
+//   this.speed = speed;
+// }
+
+// Car.prototype.accelerate = function () {
+//   console.log((this.speed += 10));
+// };
+
+// Car.prototype.brake = function () {
+//   console.log((this.speed -= 5));
+// };
+
+// // electric car
+
+// function EV(make, speed, charge) {
+//   Car.call(this, make, speed);
+//   this.charge = charge;
+// }
+// EV.prototype = Object.create(Car.prototype);
+// EV.prototype.constructor = EV;
+// EV.prototype.chargeBattery = function (chargeTo) {
+//   if (chargeTo <= 100 && chargeTo >= 0) {
+//     this.charge = chargeTo;
+//   } else {
+//     console.log("Invalid charge value!");
+//   }
+// };
+// EV.prototype.accelerate = function () {
+//   if (this.charge <= 6) {
+//     console.log(`Battery too low (${this.charge}%)`);
+//     return;
+//   }
+
+//   this.speed += 20;
+//   this.charge -= 1;
+
+//   console.log(
+//     `${this.make} is going at ${this.speed} km/h, with a charge of ${this.charge}%`
+//   );
+// };
+
+// const tesla = new EV("Tesla", 120, 23);
+
+// console.log(tesla);
+
+// tesla.chargeBattery(7);
+
+// console.log(tesla);
+
+// tesla.accelerate();
+
+// tesla.brake();
+
+// ///////////////////////////////////////
+
+// class PersonCl {
+//   constructor(fullName, birthYear) {
+//     this.fullName = fullName;
+//     this.birthYear = birthYear;
+//   }
+
+//   // Instance methods
+//   // Methods will be added to .prototype property
+//   calcAge() {
+//     console.log(2037 - this.birthYear);
+//   }
+
+//   greet() {
+//     console.log(`Hey ${this.fullName}`);
+//   }
+
+//   get age() {
+//     return 2037 - this.birthYear;
+//   }
+
+//   // Set a property that already exists
+//   set fullName(name) {
+//     if (name.includes(" ")) this._fullName = name;
+//     else alert(`${name} is not a full name!`);
+//   }
+
+//   get fullName() {
+//     return this._fullName;
+//   }
+// }
+
+// // inheretance between calsses
+
+// class StudentCl extends PersonCl {
+//   constructor(fullName, birthYear, course) {
+//     // always needs to happen first
+//     super(fullName, birthYear);
+//     this.course = course;
+//   }
+
+//   introduce() {
+//     console.log(`My name is ${this.fullName} and I study ${this.course}`);
+//   }
+//   calcAge() {
+//     console.log("This method overrides method form PersonCl class");
+//   }
+// }
+
+// const marta = new StudentCl("Marta Davis", 2012, "Computer Science");
+
+// console.log(marta);
+
+// marta.introduce();
+// marta.calcAge();
+
+///////////////////////////////////////
+// Inheritance Between "Classes": Object.create
+
+// const PersonProto = {
+//   calcAge() {
+//     console.log(2037 - this.birthYear);
+//   },
+
+//   init(firstName, birthYear) {
+//     this.firstName = firstName;
+//     this.birthYear = birthYear;
+//   },
+// };
+
+// const steven = Object.create(PersonProto);
+// console.log(steven);
+
+// const StudentProto = Object.create(PersonProto);
+
+// StudentProto.init = function (firstName, birthYear, course) {
+//   PersonProto.init.call(this, firstName, birthYear);
+//   this.course = course;
+// };
+
+// StudentProto.introduce = function () {
+//   console.log(`My name is ${this.firstName} and I study ${this.course}`);
+// };
+// console.log(StudentProto);
+
+// const jay = Object.create(StudentProto);
+// jay.init("Jay", 2010, "Computer Science");
+// jay.introduce();
+// jay.calcAge();
+
+// ///////////////////////////////////////
+
+// const Program = {
+//   display() {
+//     console.log("Display method");
+//   },
+//   init(name, type) {
+//     this.name = name;
+//     this.type = type;
+//   },
+// };
+
+// const js = Object.create(Program);
+
+// js.init("Java Script", "Web development");
+
+// console.log(js);
+
+//////////////////////////////////////////////////////////////
+
+class Account {
+  #pin;
+  #movements = [];
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin;
+    // this.movements = [];
+    this.locale = navigator.language;
+
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // public interface
+  deposit(val) {
+    this.#movements.push(val);
+  }
+
+  withdraw(val) {
+    this.deposit(-val);
+  }
+
+  #approveLoan(val) {
+    return true;
+  }
+
+  requestLoan(val) {
+    if (this.approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+  }
 }
 
-Car.prototype.accelerate = function () {
-  console.log((this.speed += 10));
-};
+const acc1 = new Account("Jonas", "EUR", 1111);
 
-Car.prototype.brake = function () {
-  console.log((this.speed -= 5));
-};
+acc1.deposit(250);
+acc1.withdraw(140);
 
-// electric car
-
-function EV(make, speed, charge) {
-  Car.call(this, make, speed);
-  this.charge = charge;
-}
-EV.prototype = Object.create(Car.prototype);
-EV.prototype.constructor = EV;
-EV.prototype.chargeBattery = function (chargeTo) {
-  if (chargeTo <= 100 && chargeTo >= 0) {
-    this.charge = chargeTo;
-  } else {
-    console.log("Invalid charge value!");
-  }
-};
-EV.prototype.accelerate = function () {
-  if (this.charge <= 6) {
-    console.log(`Battery too low (${this.charge}%)`);
-    return;
-  }
-
-  this.speed += 20;
-  this.charge -= 1;
-
-  console.log(
-    `${this.make} is going at ${this.speed} km/h, with a charge of ${this.charge}%`
-  );
-};
-
-const tesla = new EV("Tesla", 120, 23);
-
-console.log(tesla);
-
-tesla.chargeBattery(7);
-
-console.log(tesla);
-
-tesla.accelerate();
-
-tesla.brake();
+console.log(acc1);
